@@ -4,8 +4,9 @@ boolean[][] showNumbers;
 int firstRow = -1, firstCol = -1; 
 int secondRow = -1, secondCol = -1; 
 boolean waitingForReset = false; 
-int resetTime = 1000; 
+int resetTime = 500; 
 int timerStart = 0; 
+boolean gameWon = false;
 
 void setup() {
     size(500, 500);
@@ -29,17 +30,25 @@ void setup() {
 }
 
 void draw() {
-    drawGrid();
-    drawNumbers();
-    
-    if (waitingForReset && millis() - timerStart >= resetTime) {
-        showNumbers[firstRow][firstCol] = false;
-        showNumbers[secondRow][secondCol] = false; 
-        waitingForReset = false; 
-        firstRow = -1; 
-        firstCol = -1;
-        secondRow = -1;
-        secondCol = -1;
+    if (!gameWon) {
+        drawGrid();
+        drawNumbers();
+        
+        if (waitingForReset && millis() - timerStart >= resetTime) {
+            showNumbers[firstRow][firstCol] = false;
+            showNumbers[secondRow][secondCol] = false; 
+            waitingForReset = false; 
+            firstRow = -1; 
+            firstCol = -1;
+            secondRow = -1;
+            secondCol = -1;
+        }
+        
+        if (checkWin()) {
+            gameWon = true;
+        }
+    } else {
+        displayWinMessage();
     }
 }
 
@@ -79,7 +88,8 @@ void draw_numbers(int x, int y, int n) {
 }
 
 void mousePressed() {
-    if (waitingForReset) {
+    if (waitingForReset || gameWon) {
+        resetGame(); 
         return; 
     }
     
@@ -102,9 +112,38 @@ void mousePressed() {
             } else {
                 firstRow = -1;
                 firstCol = -1;
-                secondRow = -1;
-                secondCol = -1;
             }
         }
     }
+}
+
+boolean checkWin() {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            if (!showNumbers[i][j]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void displayWinMessage() {
+    background(255);
+    fill(0);
+    textSize(32);
+    textAlign(CENTER, CENTER);
+    text("You win!", width / 2, height / 2 - 20);
+    textSize(20);
+    text("Click to play again", width / 2, height / 2 + 20);
+}
+
+void resetGame() {
+    firstRow = -1;
+    firstCol = -1;
+    secondRow = -1;
+    secondCol = -1;
+    waitingForReset = false;
+    gameWon = false;
+    showNumbers = new boolean[rows][cols];
 }
