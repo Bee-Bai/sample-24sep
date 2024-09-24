@@ -1,6 +1,6 @@
 int[][] grid;
 int rows, cols, w, h;
-boolean showNumbers = false;
+boolean[][] showNumbers;
 
 void setup() {
     size(500, 500);
@@ -17,16 +17,15 @@ void setup() {
 
     w = width / cols;
     h = height / rows;
+
+    showNumbers = new boolean[rows][cols];
     
     drawGrid();
 }
 
 void draw() {
     drawGrid();
-    
-    if (showNumbers) {
-        drawNumbers();
-    }
+    drawNumbers();
 }
 
 void drawGrid() {
@@ -37,25 +36,23 @@ void drawGrid() {
 
     while (y <= 500) {
         line(0, y, 500, y); 
-        y += 166;            
+        y += h;            
     }
 
     y = 0;
     while (x <= 500) {
         line(x, 0, x, 500);  
-        x += 125;            
+        x += w;            
     }
 }
 
 void drawNumbers() {
-    int i = 0;
-    while (i < rows) {
-        int j = 0;
-        while (j < cols) {
-            draw_numbers(45 + j * w, 60 + i * h, grid[i][j]);
-            j++;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            if (showNumbers[i][j]) {
+                draw_numbers(45 + j * w, 60 + i * h, grid[i][j]);
+            }
         }
-        i++;
     }
 }
 
@@ -67,5 +64,10 @@ void draw_numbers(int x, int y, int n) {
 }
 
 void mousePressed() {
-    showNumbers = !showNumbers;
+    int i = mouseY / h;
+    int j = mouseX / w;
+    
+    if (i >= 0 && i < rows && j >= 0 && j < cols) {
+        showNumbers[i][j] = !showNumbers[i][j];
+    }
 }
