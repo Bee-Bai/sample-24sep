@@ -1,6 +1,33 @@
+int[][] grid;
+int rows, cols, w, h;
+boolean showNumbers = false;
+
 void setup() {
     size(500, 500);
     strokeWeight(12);
+    
+    grid = new int[][] {
+        {1, 1, 2, 2},
+        {3, 3, 4, 4},
+        {5, 5, 6, 6}
+    };
+
+    rows = grid.length;
+    cols = grid[0].length;
+
+    w = width / cols;
+    h = height / rows;
+    
+    drawGrid();
+}
+
+void draw() {
+    if (showNumbers) {
+        drawNumbers();
+    }
+}
+
+void drawGrid() {
     background(255);
     
     int x = 0;
@@ -16,26 +43,14 @@ void setup() {
         line(x, 0, x, 500);  
         x += 125;            
     }
-    
-    // 2D array of sample values with pairs of even numbers
-    int[][] grid = {
-        {1, 1, 2, 2},
-        {3, 3, 4, 4},
-        {5, 5, 6, 6}
-    };
+}
 
-    int rows = grid.length;
-    int cols = grid[0].length;
-
-    int w = width / cols;
-    int h = height / rows;
-
+void drawNumbers() {
     int i = 0;
     while (i < rows) {
         int j = 0;
         while (j < cols) {
             draw_numbers(45 + j * w, 60 + i * h, grid[i][j]);
-            println(i, j, grid[i][j]);
             j++;
         }
         i++;
@@ -43,8 +58,14 @@ void setup() {
 }
 
 void draw_numbers(int x, int y, int n) {
-    fill(0); // ตั้งค่าสีตัวอักษร
-    textSize(32); // ขนาดตัวอักษร
-    textAlign(CENTER, CENTER); // จัดกึ่งกลาง
-    text(n, x + 10, y + 20); // แสดงตัวเลขในตำแหน่งที่กำหนด
+    fill(0);
+    textSize(32);
+    textAlign(CENTER, CENTER);
+    text(n, x + 10, y + 20);
+}
+
+void mousePressed() {
+    if (!showNumbers) {
+        showNumbers = true;
+    }
 }
