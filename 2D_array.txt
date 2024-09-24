@@ -96,14 +96,21 @@ void draw_numbers(int x, int y, int n) {
 }
 
 void mousePressed() {
-    if (waitingForReset || gameWon) {
+    // ถ้าเกมชนะ ให้รีเซ็ตเกมเมื่อคลิกที่ใด ๆ
+    if (gameWon) {
         resetGame(); 
         return; 
     }
     
+    // ถ้ายังรอรีเซ็ต ไม่ทำอะไร
+    if (waitingForReset) {
+        return; 
+    }
+
     int i = mouseY / h;
     int j = mouseX / w;
     
+    // ตรวจสอบว่าคลิกที่ตำแหน่งที่ถูกต้องและยังไม่ได้เปิดเผย
     if (i >= 0 && i < rows && j >= 0 && j < cols && !showNumbers[i][j]) {
         showNumbers[i][j] = true;
 
@@ -118,6 +125,7 @@ void mousePressed() {
                 waitingForReset = true;
                 timerStart = millis();
             } else {
+                // ถ้าเลขตรงกัน ให้รีเซ็ตตัวแปรที่เกี่ยวข้อง
                 firstRow = -1;
                 firstCol = -1;
             }
