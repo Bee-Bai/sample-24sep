@@ -7,19 +7,22 @@ void setup() {
     int y = 0;
 
     while (y <= 500) {
-        line(0, y, 500, y);  // เส้นแนวนอน
-        y += 166;            // เพิ่มค่า y ตามความสูงของแต่ละบรรทัด
+        line(0, y, 500, y); 
+        y += 166;            
     }
 
     y = 0;
     while (x <= 500) {
-        line(x, 0, x, 500);  // เส้นแนวตั้ง
-        x += 125;            // เพิ่มค่า x ตามความกว้างของแต่ละบรรทัด
+        line(x, 0, x, 500);  
+        x += 125;            
     }
-
     
-        // 2D array of sample values
-    int[][] grid = {{1, 2, 1, 3}, {3, 4, 1, 2}, {2, 1, 3, 4}};
+    // 2D array of sample values with pairs of even numbers
+    int[][] grid = {
+        {1, 1, 2, 2},
+        {3, 3, 4, 4},
+        {5, 5, 6, 6}
+    };
 
     int rows = grid.length;
     int cols = grid[0].length;
@@ -27,42 +30,21 @@ void setup() {
     int w = width / cols;
     int h = height / rows;
 
-    update(grid, -1);
     int i = 0;
     while (i < rows) {
-
         int j = 0;
         while (j < cols) {
-
-            draw_lines(45 + j * w, 60 + i * h, grid[i][j]);
+            draw_numbers(45 + j * w, 60 + i * h, grid[i][j]);
             println(i, j, grid[i][j]);
             j++;
         }
-
         i++;
     }
 }
 
-void update(int[][] a, int d) { // array is passed by reference?
-    int i = 0;
-    while (i < a.length) {
-
-        int j = 0;
-        while (j < a[0].length) {
-
-            a[i][j] = a[i][j] + d;
-            j++;
-        }
-
-        i++;
-    }
-}
-
-void draw_lines(int x, int y, int n) {
-    int i = 0;
-    while (i < n) {
-
-        line(x + i * 20, y, x + i * 20, y + 40);
-        i++;
-    }
+void draw_numbers(int x, int y, int n) {
+    fill(0); // ตั้งค่าสีตัวอักษร
+    textSize(32); // ขนาดตัวอักษร
+    textAlign(CENTER, CENTER); // จัดกึ่งกลาง
+    text(n, x + 10, y + 20); // แสดงตัวเลขในตำแหน่งที่กำหนด
 }
