@@ -22,6 +22,8 @@ void setup() {
 }
 
 void draw() {
+    drawGrid();
+    
     if (showNumbers) {
         drawNumbers();
     }
@@ -65,7 +67,5 @@ void draw_numbers(int x, int y, int n) {
 }
 
 void mousePressed() {
-    if (!showNumbers) {
-        showNumbers = true;
-    }
+    showNumbers = !showNumbers;
 }
