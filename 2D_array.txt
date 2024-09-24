@@ -1,6 +1,11 @@
 int[][] grid;
 int rows, cols, w, h;
 boolean[][] showNumbers;
+int firstRow = -1, firstCol = -1; 
+int secondRow = -1, secondCol = -1; 
+boolean waitingForReset = false; 
+int resetTime = 1000; 
+int timerStart = 0; 
 
 void setup() {
     size(500, 500);
@@ -26,6 +31,16 @@ void setup() {
 void draw() {
     drawGrid();
     drawNumbers();
+    
+    if (waitingForReset && millis() - timerStart >= resetTime) {
+        showNumbers[firstRow][firstCol] = false;
+        showNumbers[secondRow][secondCol] = false; 
+        waitingForReset = false; 
+        firstRow = -1; 
+        firstCol = -1;
+        secondRow = -1;
+        secondCol = -1;
+    }
 }
 
 void drawGrid() {
@@ -64,10 +79,32 @@ void draw_numbers(int x, int y, int n) {
 }
 
 void mousePressed() {
+    if (waitingForReset) {
+        return; 
+    }
+    
     int i = mouseY / h;
     int j = mouseX / w;
     
-    if (i >= 0 && i < rows && j >= 0 && j < cols) {
-        showNumbers[i][j] = !showNumbers[i][j];
+    if (i >= 0 && i < rows && j >= 0 && j < cols && !showNumbers[i][j]) {
+        showNumbers[i][j] = true;
+
+        if (firstRow == -1 && firstCol == -1) {
+            firstRow = i;
+            firstCol = j;
+        } else {
+            secondRow = i;
+            secondCol = j;
+
+            if (grid[firstRow][firstCol] != grid[secondRow][secondCol]) {
+                waitingForReset = true;
+                timerStart = millis();
+            } else {
+                firstRow = -1;
+                firstCol = -1;
+                secondRow = -1;
+                secondCol = -1;
+            }
+        }
     }
 }
