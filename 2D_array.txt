@@ -4,7 +4,7 @@ boolean[][] showNumbers;
 int firstRow = -1, firstCol = -1; 
 int secondRow = -1, secondCol = -1; 
 boolean waitingForReset = false; 
-int resetTime = 500; 
+int resetTime = 1000; 
 int timerStart = 0; 
 boolean gameWon = false;
 
@@ -12,19 +12,16 @@ void setup() {
     size(500, 500);
     strokeWeight(12);
     
-    grid = new int[][] {
-        {1, 1, 2, 2},
-        {3, 3, 4, 4},
-        {5, 5, 6, 6}
-    };
-
-    rows = grid.length;
-    cols = grid[0].length;
+    rows = 3;  
+    cols = 4;  
 
     w = width / cols;
     h = height / rows;
 
     showNumbers = new boolean[rows][cols];
+    grid = new int[rows][cols];
+
+    generateRandomGrid();
     
     drawGrid();
 }
@@ -49,6 +46,17 @@ void draw() {
         }
     } else {
         displayWinMessage();
+    }
+}
+
+void generateRandomGrid() {
+    int[] numbers = {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6};
+
+    for (int i = 0; i < rows * cols; i++) {
+        int randomIndex = int(random(numbers.length)); 
+        grid[i / cols][i % cols] = numbers[randomIndex]; 
+        numbers[randomIndex] = numbers[numbers.length - 1]; 
+        numbers = shorten(numbers); 
     }
 }
 
@@ -145,5 +153,6 @@ void resetGame() {
     secondCol = -1;
     waitingForReset = false;
     gameWon = false;
-    showNumbers = new boolean[rows][cols];
+    showNumbers = new boolean[rows][cols]; 
+    generateRandomGrid(); 
 }
